@@ -1,0 +1,29 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+from subprocess import check_output, check_call
+
+def list_branches():
+  branches = check_output([ 'git', 'branch' ])
+  return [ branch.strip().strip('* ') for branch in branches.split('\n') if len(branch.strip()) > 0 ]
+
+def delete_branches(branches):
+  for branch in branches:
+    check_call([ 'git', 'branch', '-D', branch ])
+
+def cleanup():
+  check_call([ 'git', 'gc' ])
+
+if (__name__ == '__main__'):
+  branches = [ branch.strip() for branch in list_branches() if not branch.strip() == 'master' ]
+  count_branches = len(branches)
+  if count_branches == 0:
+    print("🧐  nothing to delete")
+  else:
+    delete = raw_input("🤔  delete {} branches? [y|n]: ".format(count_branches)).strip().lower()
+    if delete == 'y':
+      delete_branches(branches)
+      cleanup()
+      print("✨  deleted {} branches".format(count_branches))
+    else:
+      print("💨  no action taken")

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -e
+
+if [[ -z "$VAUTH_TOKEN" ]]; then
+    echo "Error: the VAUTH_TOKEN envvar isn't set."
+fi
+
+vault auth -method=github token="$VAUTH_TOKEN"

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -e
+
+namespace=$1
+if [[ -z "$namespace" ]]; then
+  echo "no namespace provided, using 'default' instead"
+  namespace="default"
+fi
+
+kubectl config set-context $(kubectl config current-context) --namespace=$namespace
+echo "kubectl config updated:"
+
+# TODO: This outputs the config for all clusters. We should output
+# only the namespace for the current cluster.
+kubectl config view | grep namespace:
