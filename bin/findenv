@@ -1,0 +1,30 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import argparse
+import os
+import subprocess
+import json
+
+def main():
+    parser = argparse.ArgumentParser(prog='activate',
+        description='Utility for activating environment variables that local applications depend upon.')
+
+    parser.add_argument('environment', help='The environment name to activate.')
+    args = parser.parse_args()
+
+    env_path = os.path.join(os.path.expanduser('~'), '.config', 'env')
+
+    matching_env_vars_path = None
+    for env_name in os.listdir(env_path):
+        if env_name == args.environment:
+            matching_env_vars_path = os.path.join(env_path, env_name, 'vars.sh')
+            break
+
+    if matching_env_vars_path is None or not os.path.exists(matching_env_vars_path):
+        print('😧 no env for %s fround' % env_name)
+    else:
+        print('source %s' % matching_env_vars_path)
+
+if __name__ == '__main__':
+    main()

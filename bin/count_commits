@@ -1,0 +1,19 @@
+#!/usr/bin/env python
+
+from argparse import ArgumentParser
+from subprocess import check_output
+
+def main():
+    parser = ArgumentParser(prog="count_commits",
+        description="A utility for determining how many commits exist in your " +
+                    "working copy that aren't in origin/master."
+    )
+    parser.add_argument("--target", "-t", default="origin/master",
+        help="The remote ref to compare against.")
+
+    args = parser.parse_args()
+    shas = check_output([ "git", "rev-list", "%s...HEAD" % args.target ])
+    print(len(shas.strip().split("\n")))
+
+if __name__ == "__main__":
+    main()
